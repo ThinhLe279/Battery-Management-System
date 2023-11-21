@@ -15,11 +15,12 @@ int main(void)
 	USART2_Init();
 	Adc_set_up();
 	Mux_set_up();
+	MFET_set_up();
 
 	int Int_temp = 0;
 	int LM35_temp = 0;
 
-	char buf[200];
+	char buf[200];	// contain transfering data
 
 	float cell_vol[4] = {0, 0, 0, 0};
 	float battery_vol = 0;
