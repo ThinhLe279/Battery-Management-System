@@ -1,13 +1,11 @@
 
-
 /* Includes */
 #include <stddef.h>
 #include <stdio.h>
 #include "prototype.h"
 #include "nucleo152start.h"
 
-int main(void)
-{
+int main(void) {
 
 	/* Configure the system clock to 32 MHz and update SystemCoreClock */
 	SetSysClock();
@@ -22,7 +20,7 @@ int main(void)
 
 	char buf[200];	// contain transfering data
 
-	float cell_vol[4] = {0, 0, 0, 0};
+	float cell_vol[4] = { 0, 0, 0, 0 };
 	float battery_vol = 0;
 	float shunt_resistor = 0.01;
 	float current = 0;
@@ -30,8 +28,12 @@ int main(void)
 	GPIOA->ODR &= ~(1 << Select_Pin_B);
 	GPIOA->ODR &= ~(1 << Select_Pin_A);
 	/* Infinite loop */
-	while (1)
-	{
+	while (1) {
+
+		GPIOA->ODR |= (1 << 8);  // close C_FET
+		//GPIOA->ODR &= ~(1 << 8);  // open C_FET
+		GPIOA->ODR &= ~(1 << 9); // Open D_FET
+		//GPIOA->ODR |= (1 << 9);  // close D_FET
 
 		Int_temp = Internal_Temp_Read();
 		delay_Ms(200);
@@ -46,13 +48,11 @@ int main(void)
 		}
 
 		current = battery_vol / shunt_resistor;
-		sprintf(buf, "LM35 Temp: %d C \n\rInternal Temp: %d C\n\rCell 1 (mV): %d\n\rcell 2 (mV): %d\n\rcell 3 (mV): %d\n\rcell 4 (mV): %d\n\rCurrent (mA): %d\n\r"
-				, LM35_temp, Int_temp
-				, (int)cell_vol[0], (int)cell_vol[1]
-				, (int)cell_vol[2], (int)cell_vol[3]
-				, (int)current);
+		sprintf(buf,
+				"LM35 Temp: %d C \n\rInternal Temp: %d C\n\rCell 1 (mV): %d\n\rcell 2 (mV): %d\n\rcell 3 (mV): %d\n\rcell 4 (mV): %d\n\rCurrent (mA): %d\n\r",
+				LM35_temp, Int_temp, (int) cell_vol[0], (int) cell_vol[1],
+				(int) cell_vol[2], (int) cell_vol[3], (int) current);
 		battery_vol = 0;
-
 
 		display(buf);
 		delay_Ms(1000);

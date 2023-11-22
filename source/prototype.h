@@ -1,4 +1,3 @@
-
 #ifndef PROTOTYPE_H_
 #define PROTOTYPE_H_
 
@@ -9,8 +8,6 @@
 
 #define Select_Pin_B 5
 #define Select_Pin_A 6
-
-
 
 void Adc_set_up();
 
