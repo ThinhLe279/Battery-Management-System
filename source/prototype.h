@@ -18,6 +18,7 @@ void MFET_set_up();
 void Select_mux_pin(int channel);
 
 float Read_Cell_Voltage(void);
+int Read_shunt_resistor(void);
 
 int Internal_Temp_Read();
 

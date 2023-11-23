@@ -13,9 +13,9 @@ void Adc_set_up() {
 
 	// set Analog pin
 	RCC->AHBENR |= 1;					// enable GPIOA clock
-	GPIOA->MODER |= 0x3;				// PA0 for LM35
-	GPIOA->MODER |= (1 << 3) | (1 << 2); // PA1 for the multiplexer
-	GPIOA->MODER |= (1 << 9) | (1 << 8); // PA4 for the multiplexer
+	GPIOA->MODER |= 0x3;				// PA0 for LM35		A0
+	GPIOA->MODER |= (1 << 3) | (1 << 2); // PA1 for the multiplexer		A1
+	GPIOA->MODER |= (1 << 9) | (1 << 8); // PA4 for the Shunt resistor.		A2
 	// setup ADC1 and temp sensor. p287
 	RCC->APB2ENR |= 0x00000200; // enable ADC1 clock
 	// set the resolution
@@ -67,6 +67,23 @@ float Read_Cell_Voltage(void) {
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 
 	return mili_volt;
+}
+
+int Read_shunt_resistor(void) {		// this function to read the current from Shunt
+
+	int result = 0;
+	ADC1->SQR5 = 4;	// Set the conversion sequence to start at the specified channel
+	ADC1->CR2 |= 1;			 // Bit 0, ADC on/off (1=on, 0=off)
+	ADC1->CR2 |= 0x40000000; // Start conversion
+	while (!(ADC1->SR & 2)) {
+	}				   // Wait for conversion complete
+	result = ADC1->DR; // Read conversion result
+	// I just return the ADC value of this channel, you need to apply your fomula to calculate the current
+
+	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
+
+	return result;
+
 }
 
 int Internal_Temp_Read() {

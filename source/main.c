@@ -17,6 +17,7 @@ int main(void) {
 
 	int Int_temp = 0;
 	int LM35_temp = 0;
+	int shunt = 0;
 
 	char buf[200];	// contain transfering data
 
@@ -34,6 +35,11 @@ int main(void) {
 		//GPIOA->ODR &= ~(1 << 8);  // open C_FET
 		GPIOA->ODR &= ~(1 << 9); // Open D_FET
 		//GPIOA->ODR |= (1 << 9);  // close D_FET
+
+		shunt = Read_shunt_resistor();
+		delay_Ms(200);
+		sprintf(buf, "ADC of Shunt reading: %d\n\r", shunt);
+		display(buf);
 
 		Int_temp = Internal_Temp_Read();
 		delay_Ms(200);
