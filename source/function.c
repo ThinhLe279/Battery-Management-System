@@ -52,7 +52,7 @@ void Select_mux_pin(int channel) {
 	}
 }
 
-float Read_Cell_Voltage(void) {
+float Read_Cell_Voltage(void) { // this functions return voltage of a cell in mV
 	int result = 0;
 	float mili_volt = 0;
 	ADC1->SQR5 = 1;	// Set the conversion sequence to start at the specified channel
@@ -69,7 +69,7 @@ float Read_Cell_Voltage(void) {
 	return mili_volt;
 }
 
-int Read_shunt_resistor(void) {		// this function to read the current from Shunt
+float Read_shunt_resistor(void) {	// this function to read the current from Shunt ( in mA)
 
 	int result = 0;
 	ADC1->SQR5 = 4;	// Set the conversion sequence to start at the specified channel
@@ -81,8 +81,11 @@ int Read_shunt_resistor(void) {		// this function to read the current from Shunt
 	// I just return the ADC value of this channel, you need to apply your fomula to calculate the current
 
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
+	float vol = (result / 4095.0) * 3.3;
+	float value1 = vol / 700.0;
+	float current = value1 / 0.01;
 
-	return result;
+	return current;
 
 }
 

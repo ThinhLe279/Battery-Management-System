@@ -1,9 +1,11 @@
-
 /* Includes */
 #include <stddef.h>
 #include <stdio.h>
 #include "prototype.h"
 #include "nucleo152start.h"
+
+#define SHUNT_TEST
+#define Median 0
 
 int main(void) {
 
@@ -17,7 +19,7 @@ int main(void) {
 
 	int Int_temp = 0;
 	int LM35_temp = 0;
-	int shunt = 0;
+	float shunt = 0;
 
 	char buf[200];	// contain transfering data
 
@@ -25,6 +27,8 @@ int main(void) {
 	float battery_vol = 0;
 	float shunt_resistor = 0.01;
 	float current = 0;
+
+	float shunt_arr[5] = {0, 0, 0, 0, 0};
 
 	GPIOA->ODR &= ~(1 << Select_Pin_B);
 	GPIOA->ODR &= ~(1 << Select_Pin_A);
@@ -35,12 +39,22 @@ int main(void) {
 		//GPIOA->ODR &= ~(1 << 8);  // open C_FET
 		GPIOA->ODR &= ~(1 << 9); // Open D_FET
 		//GPIOA->ODR |= (1 << 9);  // close D_FET
+#ifdef SHUNT_TEST
 
-		shunt = Read_shunt_resistor();
+#if (Median > 0)
+		for (int i = 0; i < 5; i++) {
+			shunt_arr[i] = Read_shunt_resistor();
+			delay_Ms(100);
+		}
 		delay_Ms(200);
-		sprintf(buf, "ADC of Shunt reading: %d\n\r", shunt);
+		shunt = findMedian(shunt_arr, 5);
+#else
+		shunt = Read_shunt_resistor();
+		delay_Ms(1000);
+#endif
+		sprintf(buf, "ADC of Shunt reading: %d\n\r", (int)shunt);
 		display(buf);
-
+#else
 		Int_temp = Internal_Temp_Read();
 		delay_Ms(200);
 		LM35_temp = LM35_Temp_read();
@@ -61,6 +75,7 @@ int main(void) {
 		battery_vol = 0;
 
 		display(buf);
+#endif
 		delay_Ms(1000);
 	}
 	return 0;
