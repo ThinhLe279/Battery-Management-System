@@ -85,7 +85,7 @@ float Read_shunt_resistor(void) {	// this function to read the current from Shun
 	float value1 = vol / 700.0;
 	float current = value1 / 0.01;
 
-	return current;
+	return current * 1000;
 
 }
 
