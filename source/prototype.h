@@ -21,9 +21,9 @@ float Read_Cell_Voltage(void);
 
 float Read_shunt_resistor(void);
 
-int Internal_Temp_Read();
+float Internal_Temp_Read();
 
-int LM35_Temp_read();
+float LM35_Temp_read();
 
 void USART2_Init(void);
 

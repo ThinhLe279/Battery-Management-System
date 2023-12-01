@@ -21,7 +21,7 @@ void Mosfet_Driving(uint32_t mosfet_mode) {
 
 	GPIOA->ODR |= mosfet_mode;		// set mosfet
 	while (((GPIOA->IDR) & (MOSFET_MASK)) != mosfet_mode)
-		; // ensure mosfet are set to correct state
+		; // ensure mosfet are set to correct state !!
 
 }
 
@@ -79,27 +79,27 @@ void BMS_Operation(void) {
 
 	case (CURRENT_BIGGER_THAN_1A):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1");
+		display("mosfet state: 1 - 1\n\r");
 		break;
 
 	case (CELL_VOL_BIGGER_THAN_2_2 | INT_TEMP_BELOW_0):
 		Mosfet_Driving(DISCHARGE_MODE);
-		display("mosfet state: 0 - 1");
+		display("mosfet state: 0 - 1\n\r");
 		break;
 
 	case (CELL_VOL_BIGGER_THAN_2_2):
 		Mosfet_Driving(DISCHARGE_MODE);
-		display("mosfet state: 0 - 1");
+		display("mosfet state: 0 - 1\n\r");
 		break;
 
 	case (CURRENT_BIGGER_THAN_1A | CELL_VOL_BIGGER_THAN_2_2 | INT_TEMP_BELOW_0):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1");
+		display("mosfet state: 1 - 1\n\r");
 		break;
 
 	case (CURRENT_BIGGER_THAN_1A | CELL_VOL_BIGGER_THAN_2_2):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1");
+		display("mosfet state: 1 - 1\n\r");
 		break;
 
 	default:

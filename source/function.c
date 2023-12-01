@@ -61,8 +61,11 @@ float Read_Cell_Voltage(void) { // this functions return voltage of a cell in mV
 	while (!(ADC1->SR & 2)) {
 	}				   // Wait for conversion complete
 	result = ADC1->DR; // Read conversion result
+	//char buf[100];
+	//sprintf(buf, "ADC of Reading cell function: %d\n\r", result);
+	//display(buf);
 
-	mili_volt = ((result * 3.33) / 4095.0) * 1000;
+	mili_volt = ((result * 3.3) / 4095.0) * 1000;
 
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 
@@ -89,7 +92,7 @@ float Read_shunt_resistor(void) {	// this function to read the current from Shun
 
 }
 
-int Internal_Temp_Read() {
+float Internal_Temp_Read() {
 	int result = 0;	 // store adc value
 	ADC1->SQR5 = 16; // SQ1 for channel 16 (internal sensor)
 	ADC1->CR2 |= 1;	 // bit 0, ADC on/off (1=on, 0=off)
@@ -102,15 +105,13 @@ int Internal_Temp_Read() {
 
 	float result2 = (110.0 - 30.0) / ((float) TS_CAL2 - (float) TS_CAL1)
 			* ((float) result - (float) TS_CAL1) + 50.0;
-	result2 = result2 * 100;
-	int result3 = (int) result2;
 
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 
-	return result3;
+	return result2;
 }
 
-int LM35_Temp_read() {
+float LM35_Temp_read() {
 	int result = 0;
 	ADC1->SQR5 = 0;			 // SQ1 for channel (A0)
 	ADC1->CR2 |= 1;			 // bit 0, ADC on/off (1=on, 0=off)
@@ -120,17 +121,17 @@ int LM35_Temp_read() {
 
 	result = ADC1->DR;
 
-	float deg_dec = (result / 4095.0) * 3.3;
-	deg_dec *= 100;					 // to get rid of decimal
-	int final_deg = (deg_dec) / 100; // to grab integer part
-	final_deg *= 13.33;
-	int final_deg_dec = ((int) deg_dec % 100); // to grab decimal part
-	final_deg_dec = (final_deg_dec * 13.33) / 100;
-	int final_value = final_deg + final_deg_dec;
+	float voltage = (result / 4095.0) * 3.3;
+	//voltage *= 100;					 // to get rid of decimal
+	//int final_deg = (voltage) / 100; // to grab integer part
+	float temp = voltage * 13.33;
+	//int final_deg_dec = ((int) deg_dec % 100); // to grab decimal part
+	//final_deg_dec = (final_deg_dec * 13.33) / 100;
+	//int final_value = final_deg + final_deg_dec;
 
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 
-	return final_value;
+	return temp;
 }
 
 void USART2_Init(void) {
