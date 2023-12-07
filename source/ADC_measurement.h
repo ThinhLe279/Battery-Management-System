@@ -25,14 +25,7 @@ float Internal_Temp_Read();
 
 float LM35_Temp_read();
 
-void USART2_Init(void);
-
-void USART2_write(char data);
-
-char USART2_read(void);
-
 void delay_Ms(int delay);
 
-void display(char* buf);
 
 #endif /* PROTOTYPE_H_ */

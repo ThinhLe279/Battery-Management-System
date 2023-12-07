@@ -5,8 +5,8 @@
  *      Author: Thinh Le
  */
 
+#include "ADC_measurement.h"
 #include"battery_protect.h"
-#include"prototype.h"
 
 /*this global variable will be used as a set of flags  to demonstrating
  * the status of the battery according to Int_temp, LM32_Temp, Cell_Voltage and shunt current*/
@@ -74,36 +74,36 @@ void BMS_Operation(void) {
 	switch (battery_status) {
 	case (0x00U):
 		Mosfet_Driving(CHARGE_MODE);
-		display("mosfet state: 1 - 0");
+		//display("mosfet state: 1 - 0");
 		break;
 
 	case (CURRENT_BIGGER_THAN_1A):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1\n\r");
+		//display("mosfet state: 1 - 1\n\r");
 		break;
 
 	case (CELL_VOL_BIGGER_THAN_2_2 | INT_TEMP_BELOW_0):
 		Mosfet_Driving(DISCHARGE_MODE);
-		display("mosfet state: 0 - 1\n\r");
+		//display("mosfet state: 0 - 1\n\r");
 		break;
 
 	case (CELL_VOL_BIGGER_THAN_2_2):
 		Mosfet_Driving(DISCHARGE_MODE);
-		display("mosfet state: 0 - 1\n\r");
+		//display("mosfet state: 0 - 1\n\r");
 		break;
 
 	case (CURRENT_BIGGER_THAN_1A | CELL_VOL_BIGGER_THAN_2_2 | INT_TEMP_BELOW_0):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1\n\r");
+		//display("mosfet state: 1 - 1\n\r");
 		break;
 
 	case (CURRENT_BIGGER_THAN_1A | CELL_VOL_BIGGER_THAN_2_2):
 		Mosfet_Driving(CLOSED_MODE);
-		display("mosfet state: 1 - 1\n\r");
+		//display("mosfet state: 1 - 1\n\r");
 		break;
 
 	default:
-		display("mosfet state: 0 - 0");
+		//display("mosfet state: 0 - 0");
 		Mosfet_Driving(OFF_MODE);
 		break;
 
