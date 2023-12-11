@@ -85,10 +85,10 @@ float Read_shunt_resistor(void) {	// this function to read the current from Shun
 
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 	float vol = (result / 4095.0) * 3.3;
-	float value1 = vol / 700.0;
+	float value1 = vol / 1000.0;
 	float current = value1 / 0.01;
 
-	return current * 1000;
+	return current * 1000;	// return in mA
 
 }
 
