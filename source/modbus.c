@@ -102,7 +102,7 @@ void Response_frame(int transfer_data) {
 	response_frame[5] = crc_low_byte;
 
 	// sending response frame:
-	display("response frame: ");
+	//display("response frame: ");
 	for (int i = 0; i < 7; i++) {
 		USART2_write(response_frame[i]);
 	}

@@ -61,9 +61,6 @@ float Read_Cell_Voltage(void) { // this functions return voltage of a cell in mV
 	while (!(ADC1->SR & 2)) {
 	}				   // Wait for conversion complete
 	result = ADC1->DR; // Read conversion result
-	//char buf[100];
-	//sprintf(buf, "ADC of Reading cell function: %d\n\r", result);
-	//display(buf);
 
 	mili_volt = ((result * 3.3) / 4095.0) * 1000;
 
@@ -122,13 +119,7 @@ float LM35_Temp_read() {
 	result = ADC1->DR;
 
 	float voltage = (result / 4095.0) * 3.3;
-	//voltage *= 100;					 // to get rid of decimal
-	//int final_deg = (voltage) / 100; // to grab integer part
 	float temp = voltage * 13.33;
-	//int final_deg_dec = ((int) deg_dec % 100); // to grab decimal part
-	//final_deg_dec = (final_deg_dec * 13.33) / 100;
-	//int final_value = final_deg + final_deg_dec;
-
 	ADC1->CR2 &= ~1; // bit 0, ADC on/off (1=on, 0=off)
 
 	return temp;

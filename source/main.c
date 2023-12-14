@@ -9,7 +9,7 @@
 #include "USART2_DMA_Config.h"
 #include "modbus.h"
 
-//#define MODBUS_TEST
+
 
 int flag = 0;
 int main(void) {
@@ -32,67 +32,18 @@ int main(void) {
 	float shunt = 0;
 
 	MODBUS Mod;
-	char buf[200];	// contain transfering data
 	GPIOA->ODR &= ~(1 << Select_Pin_B);
 	GPIOA->ODR &= ~(1 << Select_Pin_A);
 	/* Infinite loop */
 	while (1) {
 
-#ifdef	MODBUS_TEST
-		switch (flag) {
-			case 0:
-			break;
 
-			case 1:
-			display("slave address is correct");
-			Modbus_routine(&Mod);
-			Restart_DMA();
-			Reset_DMA_RX_BUFFER();
-			USART2->CR1 |= (1 << 2);	////re-enable RE
-
-			flag = 0;
-			break;
-
-			case 2:
-			display("wrong address");
-			Restart_DMA();
-			Reset_DMA_RX_BUFFER();
-			USART2->CR1 |= (1 << 2);//re-enable RE
-			flag = 0;
-			break;
-		}
-
-		shunt = 853.4;
-		Mod.shunt = (int)(shunt * 10);
-
-		Int_temp = 24.4;
-		Mod.int_temp = (int) (Int_temp * 10);
-
-		LM35_temp = 25.6;
-		Mod.LM35_temp = (int) (LM35_temp * 10);
-
-		cell_vol[0] = 2000.0;
-		Mod.cell_vol[0] = (int) (cell_vol[0] * 10);
-
-		cell_vol[1] = 2100.0;
-		Mod.cell_vol[1] = (int) (cell_vol[1] * 10);
-
-		cell_vol[2] = 2200.0;
-		Mod.cell_vol[2] = (int) (cell_vol[2] * 10);
-
-		cell_vol[3] = 2300.0;
-		Mod.cell_vol[3] = (int) (cell_vol[3] * 10);
-
-		//display("sensing.....");
-		delay_Ms(1000);
-
-#else
 		switch (flag) {
 		case 0:
 			break;
 
 		case 1:
-			display("slave address is correct");
+			//display("slave address is correct");
 			Modbus_routine(&Mod);
 			Restart_DMA();
 			Reset_DMA_RX_BUFFER();
@@ -101,7 +52,7 @@ int main(void) {
 			break;
 
 		case 2:
-			display("wrong address");
+			//display("wrong address");
 			Restart_DMA();
 			Reset_DMA_RX_BUFFER();
 			USART2->CR1 |= (1 << 2);	//re-enable RE
@@ -131,17 +82,10 @@ int main(void) {
 		}
 		Batt_cells_check(cell_vol);
 
-		sprintf(buf,
-				"LM35 Temp: %d C \n\rInternal Temp: %d C\n\rCell 1 (mV): %d\n\rcell 2 (mV): %d\n\rcell 3 (mV): %d\n\rcell 4 (mV): %d\n\rCurrent (mA): %d\n\r",
-				(int) LM35_temp, (int) Int_temp, (int) cell_vol[0],
-				(int) cell_vol[1], (int) cell_vol[2], (int) cell_vol[3],
-				(int) shunt);
 
-		display(buf);
 		BMS_Operation();
 
 		delay_Ms(1000);
-#endif
 
 	}
 	return 0;

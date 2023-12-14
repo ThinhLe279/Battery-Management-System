@@ -1,0 +1,8 @@
+{
+  "folders": [],
+  "settings": {
+    "files.associations": {
+      "stm32l1xx_hal.h": "c"
+    }
+  }
+}
