@@ -1,7 +1,16 @@
+/*
+ * USART2_DMA_config.c
+ *
+ *  Created on: Dec , 2023
+ *      Author: Thinh Le
+ */
 #include "USART2_DMA_Config.h"
 #include "modbus.h"
-extern int flag;
+
+extern int flag; // global flag for MODBUS activities (first initialized in main.c)
+
 void USART2_Init(void) {
+	//enable USART2
 	RCC->APB1ENR |= 0x00020000;	 // set bit 17 (USART2 EN)
 	RCC->AHBENR |= 0x00000001;	 // enable GPIOA port clock bit 0 (GPIOA EN)
 	GPIOA->AFR[0] = 0x00000700;	 // GPIOx_AFRL p.188,AF7 p.177
@@ -13,8 +22,6 @@ void USART2_Init(void) {
 	USART2->CR1 = 0x00000008;  // TE bit. p739-740. Enable transmit
 	USART2->CR1 |= 0x00000004; // RE bit. p739-740. Enable receiver
 	USART2->CR3 |= (1 << 6); 	// enable DMAR ( DMA reception)
-	//USART2->CR1 |= 0x0020;			//enable RX interrupt
-	//NVIC_EnableIRQ(USART2_IRQn); 	//enable interrupt in NVIC
 	USART2->CR1 |= 0x00002000; // UE bit. p739-740. Uart enable
 }
 
@@ -22,7 +29,6 @@ void DMA_Init(void) {
 	// enable DMA1 clock
 	RCC->AHBENR |= (1 << 24);
 	DMA1_Channel6->CCR &= ~(1 << 0);	// disable channel first
-
 	DMA1_Channel6->CCR |= (1 << 1);	// Transfer complete interrupt enable
 	DMA1_Channel6->CCR &= ~(1 << 2);	// Half Transfer interrupt disabled;
 	DMA1_Channel6->CCR &= ~(1 << 4); 	// read from Peripheral --> Memory
@@ -66,7 +72,7 @@ void DMA1_Channel6_IRQHandler(void) {
 			flag = 1;
 		} else
 			flag = 2;
-		if (DMA_RX_BUFFER[0] == 0x24 && DMA_RX_BUFFER[1] == 0x24 ) {
+		if (DMA_RX_BUFFER[0] == 0x24 && DMA_RX_BUFFER[1] == 0x24) {
 			display("detected");
 			Restart_DMA();
 		}
@@ -77,13 +83,12 @@ void DMA1_Channel6_IRQHandler(void) {
 void Restart_DMA(void) {
 	//re-enable DMA for the next reception
 	DMA1_Channel6->CCR &= ~(1 << 0);	// disable channel
-	//DMA1->IFCR |= (1 << 21);	// Channel 6 transfer complete clear
 	DMA1_Channel6->CNDTR = (uint16_t) RX_BUFFER_SIZE;// Number of data items to transfer
 	DMA1_Channel6->CCR |= (1 << 0);		// enable channel
 }
 
 void Reset_DMA_RX_BUFFER(void) {
-	memset(DMA_RX_BUFFER, '0', RX_BUFFER_SIZE);
+	memset(DMA_RX_BUFFER, '0', RX_BUFFER_SIZE);	// reset DMA buffer for the next reception
 }
 
 void display(char* buf) {

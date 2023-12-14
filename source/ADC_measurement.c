@@ -1,8 +1,7 @@
 /*
- * function.c
  *
- *  Created on: Oct 24, 2023
- *      Author: levop
+ *  Created on: Oct , 2023
+ *      Author: Thinh Le
  */
 #include "ADC_measurement.h"
 

@@ -8,8 +8,6 @@
 #ifndef SOURCE_BATTERY_PROTECT_H_
 #define SOURCE_BATTERY_PROTECT_H_
 
-#define TESTING
-
 #include<stdint.h>
 
 #define C_FET							(uint32_t)(1 << 8)	// PA8	D7
@@ -33,12 +31,6 @@
 
 #define CURRENT_BIGGER_THAN_1A			0x10U	// bit 4 defines if the shunt current >1A or not (1 if > 1A)
 
-// Operation for MOSFET driving
-
-
-
-
-
 // function prototype
 
 void Mosfet_Driving(uint32_t mosfet_mode);
@@ -47,7 +39,5 @@ void LM35_temperature_check(float temp);
 void Current_check(float current);
 void Batt_cells_check(float* cells);
 void BMS_Operation(void);
-
-
 
 #endif /* SOURCE_BATTERY_PROTECT_H_ */

@@ -19,7 +19,8 @@
  *  0x05: READ_CELL_3
  *  0x06: READ_CELL_4
  *  0x07: READ_SHUNT*/
-extern int flag;
+
+extern int flag;	// global flag for MODBUS activities (first intialized in main.c)
 
 /*response frame structure:
  * [slave_addr; function code; byte count (0x02); Reg_val_1; reg_val_2; CRC(higher); CRC(lower) ]*/

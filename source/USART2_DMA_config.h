@@ -1,8 +1,8 @@
 /*
  * USART2_DMA_config.h
  *
- *  Created on: Dec 6, 2023
- *      Author: levop
+ *  Created on: Dec , 2023
+ *      Author: Thinh Le
  */
 
 #ifndef SOURCE_USART2_DMA_CONFIG_H_
@@ -14,7 +14,7 @@
 
 #define RX_BUFFER_SIZE	8
 
-char DMA_RX_BUFFER[RX_BUFFER_SIZE];
+char DMA_RX_BUFFER[RX_BUFFER_SIZE];		// buffer to store bytes from Master
 
 void USART2_Init(void);
 
@@ -31,6 +31,5 @@ void Restart_DMA(void);
 void Reset_DMA_RX_BUFFER(void);
 
 void display(char* buf);
-
 
 #endif /* SOURCE_USART2_DMA_CONFIG_H_ */

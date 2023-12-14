@@ -1,8 +1,8 @@
 /*
  * modbus.c
  *
- *  Created on: Dec 6, 2023
- *      Author: levop
+ *  Created on: Dec , 2023
+ *      Author: Thinh Le
  */
 
 #include "ADC_measurement.h"
@@ -11,20 +11,20 @@
 
 void Modbus_routine(MODBUS* mod_value) {
 	// check CRC of the request frame
-	unsigned short int Check_CRC = CRC16(DMA_RX_BUFFER, RX_BUFFER_SIZE);
+	unsigned short int Check_CRC = CRC16(DMA_RX_BUFFER, RX_BUFFER_SIZE); // check CRC of the request frame
 	if (Check_CRC != 0) {
 		//display("problem with CRC");
 		return;
 	}
 	//display("CRC is Okay");
 
-	if (DMA_RX_BUFFER[FUNC_CODE_POS] != FUNC_CODE) {
+	if (DMA_RX_BUFFER[FUNC_CODE_POS] != FUNC_CODE) { // check fucntion code of the request frame
 		//display("function code is wrong");
 		return;
 	}
 	//display("function code is okay");
 
-	switch (DMA_RX_BUFFER[STARTING_ADDR_POS]) {
+	switch (DMA_RX_BUFFER[STARTING_ADDR_POS]) {	// check which value the Master wants to read
 	case READ_INT_TEMP:
 		//display("read int temp:");
 		Response_frame(mod_value->int_temp);
@@ -63,7 +63,7 @@ void Modbus_routine(MODBUS* mod_value) {
 
 }
 
-unsigned short int CRC16(char *nData, unsigned short int wLength) {
+unsigned short int CRC16(char *nData, unsigned short int wLength) {	// function to calculate CRC
 	uint8_t i, j;
 	unsigned short int crc = 0xFFFF;
 	for (i = 0; i < wLength; i++) {
