@@ -5,24 +5,24 @@ services:
     image: arm32v7/influxdb
     container_name: influxdb
     ports:
-      - "8086:8086"
+      - "8086:8086"   # Maps port 8086 on the Raspberry Pi to port 8086 on the container
     environment:
       - INFLUXDB_DB=mydatabase
       - INFLUXDB_USER=thinh
       - INFLUXDB_USER_PASSWORD=12345
     volumes:
-      - ./influxdb-data:/var/lib/influxdb
+      - ./influxdb-data:/var/lib/influxdb   # mounts the host directory ./influxdb-data to /var/lib/influxdb in the container to persist data
 
   grafana:
-    image: grafana/grafana:7.5.10
+    image: grafana/grafana:7.5.10   # this version of grafana matches the Rasberry Pi's Architecture
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3000:3000"   # Maps port 3000 on the Raspberry Pi to port 3000 on the container
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=12345
     volumes:
-      - ./grafana-data:/var/lib/grafana
+      - ./grafana-data:/var/lib/grafana   # mounts the host directory ./grafana-data to /var/lib/grafana in the container to persist data
     depends_on:
       - influxdb
 

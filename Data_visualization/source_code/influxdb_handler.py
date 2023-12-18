@@ -7,6 +7,7 @@ class InfluxHandler:
         self.client = InfluxDBClient(host=host, port=port)
         self.client.switch_database(database)
 
+    # methods to insert measurements of BMS into Influxdb
     def insert_int_temp(self, int_temp):
         json_body = [
             {
